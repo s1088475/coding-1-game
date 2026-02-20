@@ -6,7 +6,8 @@ Part I: Planning & Design (15 pts)
 * Sketch a simple plan showing how the game will work step-by-step
 
 Game Idea:
-Prison escape room 
+Prison escape room
+Endless levels
 
 Game Rules:
 You move one tile at a time, so does the guard and you try not to get caught.
@@ -18,7 +19,7 @@ Police officer chasing after you.
 Exit square if you reach, you win.
 Randomized walls and replayability.
 Difficulty levels (More police officers, more distance)
-
+Tracker to keep score of how many levels you complete
 
 Gameplay Process:
 WASD to move
