@@ -16,6 +16,9 @@ Major Game Elements:
 Obstacles/walls you have to go around.
 Police officer chasing after you.
 Exit square if you reach, you win.
+Randomized walls and replayability.
+Difficulty levels (More police officers, more distance)
+
 
 Gameplay Process:
 WASD to move
