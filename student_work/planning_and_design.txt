@@ -6,12 +6,17 @@ Part I: Planning & Design (15 pts)
 * Sketch a simple plan showing how the game will work step-by-step
 
 Game Idea:
-
+Prison escape room 
 
 Game Rules:
-
+You move one tile at a time, so does the guard and you try not to get caught.
+If the guard touches you, you lose. If you make it to the exit square, you win
 
 Major Game Elements:
-
+Obstacles/walls you have to go around.
+Police officer chasing after you.
+Exit square if you reach, you win.
 
 Gameplay Process:
+WASD to move
+Make it to the exit square to escape prison
