@@ -24,3 +24,5 @@ Tracker to keep score of how many levels you complete
 Gameplay Process:
 WASD to move
 Make it to the exit square to escape prison
+Enemies move one square at a time
+Starting grid is 4x4 and it gains size every other run
