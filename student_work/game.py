@@ -58,4 +58,4 @@ def draw_board(stdscr):
     stdscr.getkey()  # pause so player can see board
 
 # curses.wrapper(draw_board)
-print(game_data['obstacle'])
+
