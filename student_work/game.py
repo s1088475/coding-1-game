@@ -22,10 +22,10 @@ game_data = {
     ],
 
     # ASCII icons
-    'prisoner': "\",
-    'officer': "\",
-    'obstacle': "\",
-    'exit': "\",
+    'player_icon': "\U0001F61F",
+    'cop_icon': "\U0001F46E",
+    'obstacle': "\U0001F4E6",
+    'exit_icon': "\U0001F6AA",
     'empty': "  "
 }
 
@@ -57,4 +57,5 @@ def draw_board(stdscr):
     stdscr.refresh()
     stdscr.getkey()  # pause so player can see board
 
-curses.wrapper(draw_board)
+# curses.wrapper(draw_board)
+print(game_data['obstacle'])
