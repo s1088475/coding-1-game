@@ -11,11 +11,13 @@
 import curses
 
 game_data = {
-    'width': 5,
-    'height': 5,
+    'width': 4,
+    'height': 4,
     'player': {"x": 0, "y": 0, "score": 0},
-    'cop': {"x": 4, "y": 4},
-    'exit': {"x": 3, "y": 4, "escaped": False},
+    'cop': {"x": 3, "y": 2},
+    'exit': [
+        {"x": 3, "y": 3, "escaped": False},
+    ],
     'obstacles': [
         {"x": 1, "y": 2},
         {"x": 3, "y": 1}
@@ -48,8 +50,8 @@ def draw_board(stdscr):
             elif any(o['x'] == x and o['y'] == y for o in game_data['obstacles']):
                 row += game_data['obstacle']
             # Collectibles
-            # elif any(c['x'] == x and c['y'] == y and not c['escaped'] for c in game_data['exit']):
-                # row += game_data['exit']
+            elif any(c['x'] == x and c['y'] == y and not c['escaped'] for c in game_data['exit']):
+                row += game_data['exit_icon']
             else:
                 row += game_data['empty']
         stdscr.addstr(y, 0, row, curses.color_pair(1))
