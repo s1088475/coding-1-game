@@ -11,8 +11,8 @@
 import curses
 
 game_data = {
-    'width': 4,
-    'height': 4,
+    'width': 5,
+    'height': 5,
     'player': {"x": 0, "y": 0, "score": 0},
     'cop': {"x": 4, "y": 4},
     'exit': {"x": 3, "y": 4, "escaped": False},
@@ -40,16 +40,16 @@ def draw_board(stdscr):
         for x in range(game_data['width']):
             # Player
             if x == game_data['player']['x'] and y == game_data['player']['y']:
-                row += game_data['prisoner']
+                row += game_data['player_icon']
             # Eagle
-            elif x == game_data['cop']['x'] and y == game_data['officer']['y']:
-                row += game_data['officer']
+            elif x == game_data['cop']['x'] and y == game_data['cop']['y']:
+                row += game_data['cop_icon']
             # Obstacles
             elif any(o['x'] == x and o['y'] == y for o in game_data['obstacles']):
                 row += game_data['obstacle']
             # Collectibles
-            elif any(c['x'] == x and c['y'] == y and not c['escaped'] for c in game_data['exit']):
-                row += game_data['exit']
+            # elif any(c['x'] == x and c['y'] == y and not c['escaped'] for c in game_data['exit']):
+                # row += game_data['exit']
             else:
                 row += game_data['empty']
         stdscr.addstr(y, 0, row, curses.color_pair(1))
@@ -57,5 +57,5 @@ def draw_board(stdscr):
     stdscr.refresh()
     stdscr.getkey()  # pause so player can see board
 
-# curses.wrapper(draw_board)
+curses.wrapper(draw_board)
 
