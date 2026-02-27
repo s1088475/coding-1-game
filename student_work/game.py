@@ -10,6 +10,12 @@
 # To make this work, you may have to type this into the terminal --> pip install curses
 import curses
 
+player_postion = (game_data[player]['x'], game_data[player]['y'])
+door_postion = (game_data[exit]['x'], game_data[exit]['y'])
+
+if player_postion == door_postion:
+    print('hello')
+    
 game_data = {
     'width': 4,
     'height': 4,
@@ -85,6 +91,9 @@ def move_player(key):
     # Check for obstacles
     if any(o['x'] == new_x and o['y'] == new_y for o in game_data['obstacles']):
         return
+
+    if any(c['x'] == new_x and c['y'] == new_y for c in game_data['exit']):
+        print("Hello world!")
 
     # Update position and increment score
     game_data['player']['x'] = new_x
