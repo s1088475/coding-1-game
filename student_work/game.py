@@ -57,7 +57,7 @@ def draw_board(stdscr):
         stdscr.addstr(y, 0, row, curses.color_pair(1))
 
     stdscr.addstr(game_data['height'] + 1, 0,
-                  f"Moves Survived: {game_data['player']['score']}",
+                  f"Moves: {game_data['player']['score']}",
                   curses.color_pair(1))
     stdscr.addstr(game_data['height'] + 2, 0,
                   "Move with W/A/S/D, Q to quit",
