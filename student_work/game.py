@@ -142,6 +142,10 @@ def main(stdscr):
                     game_data['player']["y"] == game_data['cop']["y"]):
                     break
 
+            if (game_data['player']["x"] == game_data['exit'][0]["x"] and
+                    game_data['player']["y"] == game_data['exit'][0]["y"]):
+                    break
+
             draw_board(stdscr)
 
         time.sleep(0.1)
