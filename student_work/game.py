@@ -20,7 +20,7 @@ import time
 game_data = {
     'width': 4,
     'height': 4,
-    'player': {"x": 0, "y": 0, "score": 0},
+    'player': {"x": 0, "y": 0, "score": 0, "room": 0},
     'cop': {"x": 2, "y": 2},
     'exit': [
         {"x": 3, "y": 3, "escaped": False},
@@ -68,6 +68,9 @@ def draw_board(stdscr):
                   curses.color_pair(1))
     stdscr.addstr(game_data['height'] + 2, 0,
                   "Move with W/A/S/D, Q to quit",
+                  curses.color_pair(1))
+    stdscr.addstr(game_data['height'] + 3, 0,
+                  f"Room: {game_data['player']['room']}",
                   curses.color_pair(1))
     stdscr.refresh()
 
