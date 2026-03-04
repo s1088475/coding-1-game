@@ -9,18 +9,19 @@
 
 # To make this work, you may have to type this into the terminal --> pip install curses
 import curses
+import random
+import time
+# # # player_postion = (game_data[player]['x'], game_data[player]['y'])
+# # # door_postion = (game_data[exit]['x'], game_data[exit]['y'])
 
-player_postion = (game_data[player]['x'], game_data[player]['y'])
-door_postion = (game_data[exit]['x'], game_data[exit]['y'])
-
-if player_postion == door_postion:
-    print('hello')
+# # if player_postion == door_postion:
+#     print('hello')
     
 game_data = {
     'width': 4,
     'height': 4,
     'player': {"x": 0, "y": 0, "score": 0},
-    'cop': {"x": 3, "y": 2},
+    'cop': {"x": 2, "y": 2},
     'exit': [
         {"x": 3, "y": 3, "escaped": False},
     ],
@@ -88,6 +89,7 @@ def move_player(key):
     else:
         return  # Invalid key or move off board
 
+
     # Check for obstacles
     if any(o['x'] == new_x and o['y'] == new_y for o in game_data['obstacles']):
         return
@@ -99,6 +101,20 @@ def move_player(key):
     game_data['player']['x'] = new_x
     game_data['player']['y'] = new_y
     game_data['player']['score'] += 1
+
+def move_cop():
+    directions = [(0, -1), (0, 1), (-1, 0), (1, 0)]
+    random.shuffle(directions)
+    ex, ey = game_data['cop']['x'], game_data['cop']['y']
+
+    for dx, dy in directions:
+        new_x = ex + dx
+        new_y = ey + dy
+        if 0 <= new_x < game_data['width'] and 0 <= new_y < game_data['height']:
+            if not any(o['x'] == new_x and o['y'] == new_y for o in game_data['obstacles']):
+                game_data['cop']['x'] = new_x
+                game_data['cop']['y'] = new_y
+                break
 
 def main(stdscr):
     curses.curs_set(0)
@@ -115,8 +131,10 @@ def main(stdscr):
         if key:
             if key.lower() == "q":
                 break
-
             move_player(key)
+
+            move_cop()
+            
             draw_board(stdscr)
 
 curses.wrapper(main)
