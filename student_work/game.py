@@ -92,15 +92,14 @@ def move_player(key):
 
     # Check for obstacles
     if any(o['x'] == new_x and o['y'] == new_y for o in game_data['obstacles']):
-        return
-
-    if any(c['x'] == new_x and c['y'] == new_y for c in game_data['exit']):
-        print("Hello world!")
+        return False
 
     # Update position and increment score
     game_data['player']['x'] = new_x
     game_data['player']['y'] = new_y
     game_data['player']['score'] += 1
+
+    return True
 
 def move_cop():
     directions = [(0, -1), (0, 1), (-1, 0), (1, 0)]
@@ -131,11 +130,25 @@ def main(stdscr):
         if key:
             if key.lower() == "q":
                 break
-            move_player(key)
+            moved = move_player(key)
 
-            move_cop()
-            
+            if moved == True:
+                move_cop()
+
+            if (game_data['player']["x"] == game_data['cop']["x"] and
+                    game_data['player']["y"] == game_data['cop']["y"]):
+                    break
+
             draw_board(stdscr)
+
+        time.sleep(0.1)
+
+    stdscr.clear()
+    stdscr.addstr(2, 2, "GAME OVER")
+    stdscr.addstr(3, 2, f"Final Score (Moves Survived): {game_data['player']['score']}")
+    stdscr.refresh()
+    time.sleep(5)
+
 
 curses.wrapper(main)
 
