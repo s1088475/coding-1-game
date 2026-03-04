@@ -144,6 +144,7 @@ def main(stdscr):
 
             if (game_data['player']["x"] == game_data['exit'][0]["x"] and
                     game_data['player']["y"] == game_data['exit'][0]["y"]):
+                    game_data['player']["room"] += 1
                     break
 
             draw_board(stdscr)
@@ -152,7 +153,7 @@ def main(stdscr):
 
     stdscr.clear()
     stdscr.addstr(2, 2, "GAME OVER")
-    stdscr.addstr(3, 2, f"Final Score (Moves Survived): {game_data['player']['score']}")
+    stdscr.addstr(3, 2, f"Final Score \n(Moves Survived): {game_data['player']['score']} \n(Rooms Passed): {game_data['player']['room']}")
     stdscr.refresh()
     time.sleep(5)
 
