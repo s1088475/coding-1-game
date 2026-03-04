@@ -11,11 +11,6 @@
 import curses
 import random
 import time
-# # # player_postion = (game_data[player]['x'], game_data[player]['y'])
-# # # door_postion = (game_data[exit]['x'], game_data[exit]['y'])
-
-# # if player_postion == door_postion:
-#     print('hello')
     
 game_data = {
     'width': 4,
