@@ -67,6 +67,9 @@ def draw_board(stdscr):
     stdscr.addstr(game_data['height'] + 3, 0,
                   f"Room: {game_data['player']['room']}",
                   curses.color_pair(1))
+    stdscr.addstr(game_data['height'] + 4, 0,
+                  "Objective: Pass 10 levels",
+                  curses.color_pair(1))
     stdscr.refresh()
 
 def move_player(key):
@@ -140,14 +143,18 @@ def main(stdscr):
             if (game_data['player']["x"] == game_data['exit'][0]["x"] and
                     game_data['player']["y"] == game_data['exit'][0]["y"]):
                     game_data['player']["room"] += 1
-                    break
+                    game_data['player']["x"] = 0
+                    game_data['player']["y"] = 0
 
             draw_board(stdscr)
 
         time.sleep(0.1)
 
     stdscr.clear()
-    stdscr.addstr(2, 2, "GAME OVER")
+    if game_data['player']['room'] >= 10:
+        stdscr.addstr(2, 2, "YOU WIN")
+    else:
+        stdscr.addstr(2, 2, "GAME OVER")
     stdscr.addstr(3, 2, f"Final Score \n(Moves Survived): {game_data['player']['score']} \n(Rooms Passed): {game_data['player']['room']}")
     stdscr.refresh()
     time.sleep(5)
