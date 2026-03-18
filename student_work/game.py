@@ -121,11 +121,9 @@ def move_cop():
 
 #Generates obstacles based on map size, adding more obstacles as the map grows
 def generate_obstacles():
-    """Generate obstacles based on map size"""
-    # Formula: roughly 1 obstacle per 4 squares
-    num_obstacles = max(2, (game_data['width'] * game_data['height']) // 4)
+
+    num_obstacles = max(2, (game_data['width'] * game_data['height']) // 5)
     
-    # Keep existing obstacles up to the new count, or add new ones
     while len(game_data['obstacles']) < num_obstacles:
         game_data['obstacles'].append({
             "x": random.randint(1, game_data['width'] - 2),
