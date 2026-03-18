@@ -145,6 +145,21 @@ def main(stdscr):
                     game_data['player']["room"] += 1
                     game_data['player']["x"] = 0
                     game_data['player']["y"] = 0
+                    game_data['cop']["x"] = 2
+                    game_data['cop']["y"] = 2
+                    
+                    # Make map bigger
+                    game_data['width'] += 1
+                    game_data['height'] += 1
+                    
+                    # Reposition exit to new corner
+                    game_data['exit'][0]["x"] = game_data['width'] - 1
+                    game_data['exit'][0]["y"] = game_data['height'] - 1
+                    
+                    # Reposition obstacles randomly for new map size
+                    for obstacle in game_data['obstacles']:
+                        obstacle['x'] = random.randint(1, game_data['width'] - 2)
+                        obstacle['y'] = random.randint(1, game_data['height'] - 2)
 
             draw_board(stdscr)
 
