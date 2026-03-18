@@ -70,9 +70,7 @@ def draw_board(stdscr):
     stdscr.addstr(game_data['height'] + 3, 0,
                   f"Room: {game_data['player']['room']}",
                   curses.color_pair(1))
-    stdscr.addstr(game_data['height'] + 4, 0,
-                  "Objective: Pass 10 levels",
-                  curses.color_pair(1))
+                  
     stdscr.refresh()
 #On input from the user, this function attempts to move the player in the specified direction (W/A/S/D). It checks if the move is valid (not off the board and not into an obstacle) and updates the player's position and score accordingly. If the move is invalid, it simply returns without making any changes.
 def move_player(key):
@@ -182,10 +180,8 @@ def main(stdscr):
         time.sleep(0.1)
 
     stdscr.clear()
-    if game_data['player']['room'] >= 10:
-        stdscr.addstr(2, 2, "YOU WIN")
-    else:
-        stdscr.addstr(2, 2, "GAME OVER")
+    
+    stdscr.addstr(2, 2, "GAME OVER")
     stdscr.addstr(3, 2, f"Final Score \n(Moves Survived): {game_data['player']['score']} \n(Rooms Passed): {game_data['player']['room']}")
     stdscr.refresh()
     time.sleep(5)
