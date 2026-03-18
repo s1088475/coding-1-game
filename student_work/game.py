@@ -8,10 +8,12 @@
 # - Print your playing space with starting position of each icon
 
 # To make this work, you may have to type this into the terminal --> pip install curses
+#IMPORTS
 import curses
 import random
 import time
     
+#Dictionary that holds all the data for the game, including the size of the board, the position of the player, cop, exit, and obstacles, as well as the icons used to represent each element on the board.
 game_data = {
     'width': 4,
     'height': 4,
@@ -33,6 +35,7 @@ game_data = {
     'empty': "  "
 }
 
+#Draws the game board on the terminal using the curses library. It iterates through each cell of the board and checks if it contains the player, cop, obstacles, or exit, and prints the corresponding icon. It also displays the player's score, current room, and instructions for moving.
 def draw_board(stdscr):
     curses.start_color()
     curses.use_default_colors()
@@ -71,7 +74,7 @@ def draw_board(stdscr):
                   "Objective: Pass 10 levels",
                   curses.color_pair(1))
     stdscr.refresh()
-
+#On input from the user, this function attempts to move the player in the specified direction (W/A/S/D). It checks if the move is valid (not off the board and not into an obstacle) and updates the player's position and score accordingly. If the move is invalid, it simply returns without making any changes.
 def move_player(key):
     x = game_data['player']['x']
     y = game_data['player']['y']
@@ -101,7 +104,7 @@ def move_player(key):
     game_data['player']['score'] += 1
 
     return True
-
+#After the player moves, this function randomly shuffles the possible directions (up, down, left, right) and attempts to move the cop in one of those directions. It checks if the new position is within the bounds of the board and does not contain an obstacle before updating the cop's position.
 def move_cop():
     directions = [(0, -1), (0, 1), (-1, 0), (1, 0)]
     random.shuffle(directions)
@@ -115,7 +118,7 @@ def move_cop():
                 game_data['cop']['x'] = new_x
                 game_data['cop']['y'] = new_y
                 break
-
+#Runs the game
 def main(stdscr):
     curses.curs_set(0)
     stdscr.nodelay(True)
@@ -155,7 +158,7 @@ def main(stdscr):
                     game_data['exit'][0]["x"] = game_data['width'] - 1
                     game_data['exit'][0]["y"] = game_data['height'] - 1
 
-                    
+
                     
                     for obstacle in game_data['obstacles']:
                         obstacle['x'] = random.randint(1, game_data['width'] - 2)
