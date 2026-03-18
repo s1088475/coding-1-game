@@ -118,6 +118,25 @@ def move_cop():
                 game_data['cop']['x'] = new_x
                 game_data['cop']['y'] = new_y
                 break
+
+#Generates obstacles based on map size, adding more obstacles as the map grows
+def generate_obstacles():
+    """Generate obstacles based on map size"""
+    # Formula: roughly 1 obstacle per 4 squares
+    num_obstacles = max(2, (game_data['width'] * game_data['height']) // 4)
+    
+    # Keep existing obstacles up to the new count, or add new ones
+    while len(game_data['obstacles']) < num_obstacles:
+        game_data['obstacles'].append({
+            "x": random.randint(1, game_data['width'] - 2),
+            "y": random.randint(1, game_data['height'] - 2)
+        })
+    
+    # Reposition all obstacles randomly
+    for obstacle in game_data['obstacles']:
+        obstacle['x'] = random.randint(1, game_data['width'] - 2)
+        obstacle['y'] = random.randint(1, game_data['height'] - 2)
+
 #Runs the game
 def main(stdscr):
     curses.curs_set(0)
@@ -157,12 +176,8 @@ def main(stdscr):
                     
                     game_data['exit'][0]["x"] = game_data['width'] - 1
                     game_data['exit'][0]["y"] = game_data['height'] - 1
-
-
                     
-                    for obstacle in game_data['obstacles']:
-                        obstacle['x'] = random.randint(1, game_data['width'] - 2)
-                        obstacle['y'] = random.randint(1, game_data['height'] - 2)
+                    generate_obstacles()
 
             draw_board(stdscr)
 
