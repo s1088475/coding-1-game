@@ -120,18 +120,47 @@ def move_cop():
 #Generates obstacles based on map size, adding more obstacles as the map grows
 def generate_obstacles():
 
+    def is_valid_obstacle(x, y):
+        # Don't place obstacles on the cop location, player location, or exit tile.
+        if x == game_data['cop']['x'] and y == game_data['cop']['y']:
+            return False
+        if x == game_data['player']['x'] and y == game_data['player']['y']:
+            return False
+        if any(e['x'] == x and e['y'] == y for e in game_data['exit']):
+            return False
+
+        # Don't place obstacles adjacent to any exit (door area).
+        for e in game_data['exit']:
+            if abs(e['x'] - x) <= 1 and abs(e['y'] - y) <= 1:
+                return False
+
+        if any(o['x'] == x and o['y'] == y for o in game_data['obstacles']):
+            return False
+        return True
+
     num_obstacles = max(2, (game_data['width'] * game_data['height']) // 5)
-    
+
+    # Fill obstacle list up to the target count
     while len(game_data['obstacles']) < num_obstacles:
-        game_data['obstacles'].append({
-            "x": random.randint(1, game_data['width'] - 2),
-            "y": random.randint(1, game_data['height'] - 2)
-        })
-    
-    # Reposition all obstacles randomly
+        x = random.randint(0, game_data['width'] - 1)
+        y = random.randint(0, game_data['height'] - 1)
+        if is_valid_obstacle(x, y):
+            game_data['obstacles'].append({"x": x, "y": y})
+
+    # Reposition all obstacles randomly (avoid cop / player / exit / around exit)
     for obstacle in game_data['obstacles']:
-        obstacle['x'] = random.randint(1, game_data['width'] - 2)
-        obstacle['y'] = random.randint(1, game_data['height'] - 2)
+        while True:
+            x = random.randint(0, game_data['width'] - 1)
+            y = random.randint(0, game_data['height'] - 1)
+            obstacle_set = [o for o in game_data['obstacles'] if o is not obstacle]
+
+            if any(o['x'] == x and o['y'] == y for o in obstacle_set):
+                continue
+            if not is_valid_obstacle(x, y):
+                continue
+
+            obstacle['x'], obstacle['y'] = x, y
+            break
 
 #Runs the game
 def main(stdscr):
