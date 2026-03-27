@@ -18,7 +18,7 @@ game_data = {
     'width': 4,
     'height': 4,
     'player': {"x": 0, "y": 0, "score": 0, "room": 0},
-    'cop': {"x": 2, "y": 2},
+    'cops': [{"x": 2, "y": 2}],
     'exit': [
         {"x": 3, "y": 3, "escaped": False},
     ],
@@ -48,8 +48,8 @@ def draw_board(stdscr):
             # Player
             if x == game_data['player']['x'] and y == game_data['player']['y']:
                 row += game_data['player_icon']
-            # Eagle
-            elif x == game_data['cop']['x'] and y == game_data['cop']['y']:
+            # Police officers
+            elif any(c['x'] == x and c['y'] == y for c in game_data['cops']):
                 row += game_data['cop_icon']
             # Obstacles
             elif any(o['x'] == x and o['y'] == y for o in game_data['obstacles']):
@@ -102,27 +102,29 @@ def move_player(key):
     game_data['player']['score'] += 1
 
     return True
-#After the player moves, this function randomly shuffles the possible directions (up, down, left, right) and attempts to move the cop in one of those directions. It checks if the new position is within the bounds of the board and does not contain an obstacle before updating the cop's position.
-def move_cop():
-    directions = [(0, -1), (0, 1), (-1, 0), (1, 0)]
-    random.shuffle(directions)
-    ex, ey = game_data['cop']['x'], game_data['cop']['y']
-
-    for dx, dy in directions:
-        new_x = ex + dx
-        new_y = ey + dy
-        if 0 <= new_x < game_data['width'] and 0 <= new_y < game_data['height']:
-            if not any(o['x'] == new_x and o['y'] == new_y for o in game_data['obstacles']):
-                game_data['cop']['x'] = new_x
-                game_data['cop']['y'] = new_y
-                break
+#After the player moves, this function randomly shuffles possible directions (up/down/left/right) and attempts to move every cop.
+#Cops do not move into obstacles.
+def move_cops():
+    for cop in game_data['cops']:
+        directions = [(0, -1), (0, 1), (-1, 0), (1, 0)]
+        random.shuffle(directions)
+        for dx, dy in directions:
+            new_x = cop['x'] + dx
+            new_y = cop['y'] + dy
+            if 0 <= new_x < game_data['width'] and 0 <= new_y < game_data['height']:
+                if not any(o['x'] == new_x and o['y'] == new_y for o in game_data['obstacles']):
+                    # avoid stacking cops
+                    if not any(other['x'] == new_x and other['y'] == new_y for other in game_data['cops']):
+                        cop['x'] = new_x
+                        cop['y'] = new_y
+                        break
 
 #Generates obstacles based on map size, adding more obstacles as the map grows
 def generate_obstacles():
 
     def is_valid_obstacle(x, y):
-        # Don't place obstacles on the cop location, player location, or exit tile.
-        if x == game_data['cop']['x'] and y == game_data['cop']['y']:
+        # Don't place obstacles on any cop location, player location, or exit tile.
+        if any(c['x'] == x and c['y'] == y for c in game_data['cops']):
             return False
         if x == game_data['player']['x'] and y == game_data['player']['y']:
             return False
@@ -162,6 +164,50 @@ def generate_obstacles():
             obstacle['x'], obstacle['y'] = x, y
             break
 
+
+def add_cop():
+    """Add a new cop at a random free location."""
+    for _ in range(200):
+        x = random.randint(0, game_data['width'] - 1)
+        y = random.randint(0, game_data['height'] - 1)
+        if x == game_data['player']['x'] and y == game_data['player']['y']:
+            continue
+        if any(e['x'] == x and e['y'] == y for e in game_data['exit']):
+            continue
+        if any(o['x'] == x and o['y'] == y for o in game_data['obstacles']):
+            continue
+        if any(c['x'] == x and c['y'] == y for c in game_data['cops']):
+            continue
+
+        game_data['cops'].append({"x": x, "y": y})
+        return
+
+
+def reset_cops_positions():
+    """Recenter cops after room up, keep existing count."""
+    if not game_data['cops']:
+        game_data['cops'].append({"x": 2, "y": 2})
+    else:
+        game_data['cops'][0]["x"] = 2
+        game_data['cops'][0]["y"] = 2
+
+    # Reposition additional cops to free spots
+    for cop in game_data['cops'][1:]:
+        for _ in range(200):
+            x = random.randint(0, game_data['width'] - 1)
+            y = random.randint(0, game_data['height'] - 1)
+            if x == game_data['player']['x'] and y == game_data['player']['y']:
+                continue
+            if any(e['x'] == x and e['y'] == y for e in game_data['exit']):
+                continue
+            if any(o['x'] == x and o['y'] == y for o in game_data['obstacles']):
+                continue
+            if any(other['x'] == x and other['y'] == y for other in game_data['cops']):
+                continue
+            cop['x'] = x
+            cop['y'] = y
+            break
+
 #Runs the game
 def main(stdscr):
     curses.curs_set(0)
@@ -181,11 +227,10 @@ def main(stdscr):
             moved = move_player(key)
 
             if moved == True:
-                move_cop()
+                move_cops()
 
-            if (game_data['player']["x"] == game_data['cop']["x"] and
-                    game_data['player']["y"] == game_data['cop']["y"]):
-                    break
+            if any(game_data['player']["x"] == c["x"] and game_data['player']["y"] == c["y"] for c in game_data['cops']):
+                break
 
             if (game_data['player']["x"] == game_data['exit'][0]["x"] and
                     game_data['player']["y"] == game_data['exit'][0]["y"]):
@@ -193,15 +238,17 @@ def main(stdscr):
                     game_data['player']["x"] = 0
                     game_data['player']["y"] = 0
 
-                    game_data['cop']["x"] = 2
-                    game_data['cop']["y"] = 2
-                    
                     game_data['width'] += 1
                     game_data['height'] += 1
                     
                     game_data['exit'][0]["x"] = game_data['width'] - 1
                     game_data['exit'][0]["y"] = game_data['height'] - 1
-                    
+
+                    # Add one extra cop for every 5 rooms completed
+                    if game_data['player']["room"] % 5 == 0:
+                        add_cop()
+
+                    reset_cops_positions()
                     generate_obstacles()
 
             draw_board(stdscr)
