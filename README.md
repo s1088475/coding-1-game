@@ -2,6 +2,8 @@
 
 Due date: 3/6
 
+Group members - Darrien Flores & Philip D'Angelone
+
 When you finish, add your video link here and submit one link to your project repository.
 * [Playtesting Video (1 per group)](https://new.express.adobe.com/id/urn:aaid:sc:VA6C2:d711638d-e923-485e-ac5f-b7f4f035fce0?invite=true&accept=true%3Fpreload%3Dsharesheet&promoid=Z2G1FQKR&mv=other)
 
